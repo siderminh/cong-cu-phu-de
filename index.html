@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CÔNG CỤ PHỤ ĐỀ by Dr Minh</title>
+    <!-- Sử dụng Tailwind CSS để có giao diện hiện đại -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Thêm icon cho trang web -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Liên kết tới tệp CSS tùy chỉnh -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-3xl mx-auto bg-white rounded-xl shadow-2xl p-8">
+        <!-- Tiêu đề và điều hướng Tab -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">CÔNG CỤ PHỤ ĐỀ</h1>
+            <p class="text-gray-500 mt-2">by Dr Minh</p>
+        </div>
+
+        <div class="border-b border-gray-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" role="tablist">
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="translator-tab" type="button" role="tab" aria-controls="translator" aria-selected="true">
+                        <i class="fas fa-language mr-2"></i>Trình Dịch Phụ Đề
+                    </button>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="converter-tab" type="button" role="tab" aria-controls="converter" aria-selected="false">
+                        <i class="fas fa-retweet mr-2"></i>Chuyển đổi Text sang SRT
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Nội dung các Tab -->
+        <div id="tabContent" class="pt-6">
+            <!-- Tab 1: Trình Dịch Phụ Đề -->
+            <div id="translator" role="tabpanel" aria-labelledby="translator-tab" class="space-y-6">
+                <!-- Vùng chọn file -->
+                <div>
+                    <label for="subtitle-file" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-file-upload mr-2"></i>Chọn file phụ đề (.srt, .vtt, .ass, .txt)
+                    </label>
+                    <input type="file" id="subtitle-file" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" accept=".srt,.vtt,.ass,.txt">
+                    <p id="file-name" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+
+                <!-- Ô nhập nhiều API Key -->
+                <div>
+                    <label for="api-keys" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-key mr-2"></i>Google AI Studio API Keys (mỗi key một dòng)
+                    </label>
+                    <textarea id="api-keys" rows="4" class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Nhập một hoặc nhiều API Key tại đây..."></textarea>
+                    <div class="flex items-center mt-2">
+                        <input id="save-api-keys" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="save-api-keys" class="ml-2 block text-sm text-gray-700">Lưu API Keys</label>
+                    </div>
+                </div>
+                
+                 <!-- Cài đặt phong cách và chuyên ngành -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="translation-style" class="block text-sm font-medium text-gray-700 mb-2"><i class="fas fa-paint-brush mr-2"></i>Phong cách dịch</label>
+                        <select id="translation-style" class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="default" selected>Mặc định</option>
+                            <option value="formal">Trang trọng</option>
+                            <option value="informal">Thân mật</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="translation-domain" class="block text-sm font-medium text-gray-700 mb-2"><i class="fas fa-briefcase mr-2"></i>Chuyên ngành</label>
+                        <select id="translation-domain" class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="general" selected>Tổng quát</option>
+                            <option value="information technology">Công nghệ thông tin</option>
+                            <option value="medical">Y học</option>
+                            <option value="legal">Pháp luật</option>
+                            <option value="business">Kinh tế</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Cài đặt nâng cao -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="timestamp-length" class="block text-sm font-medium text-gray-700 mb-2"><i class="fas fa-clock mr-2"></i>Số ký tự mốc thời gian</label>
+                        <input type="number" id="timestamp-length" value="32" min="0" class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Ví dụ: 32">
+                    </div>
+                    <div>
+                        <label for="start-line" class="block text-sm font-medium text-gray-700 mb-2"><i class="fas fa-list-ol mr-2"></i>Bắt đầu dịch từ dòng số</label>
+                        <input type="number" id="start-line" value="1" min="1" class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Ví dụ: 1">
+                    </div>
+                </div>
+                
+                <!-- Cài đặt dịch -->
+                <div class="flex items-center justify-end flex-wrap gap-y-2 gap-x-6">
+                    <!-- Sửa lỗi nhận diện -->
+                    <div class="flex items-center space-x-2">
+                        <label for="fix-sr-errors-toggle" class="text-sm font-medium text-gray-700">Sửa lỗi nhận diện giọng nói</label>
+                        <label for="fix-sr-errors-toggle" class="flex items-center cursor-pointer">
+                            <div class="relative">
+                                <input type="checkbox" id="fix-sr-errors-toggle" class="sr-only">
+                                <div class="block bg-gray-300 w-12 h-6 rounded-full"></div>
+                                <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Tự động tiếp tục -->
+                    <div class="flex items-center space-x-2">
+                        <label for="auto-resume-toggle" class="text-sm font-medium text-gray-700">Tự động tiếp tục khi lỗi</label>
+                        <label for="auto-resume-toggle" class="flex items-center cursor-pointer">
+                            <div class="relative">
+                                <input type="checkbox" id="auto-resume-toggle" class="sr-only" checked>
+                                <div class="block bg-gray-300 w-12 h-6 rounded-full"></div>
+                                <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full"></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+
+                <!-- Các nút điều khiển -->
+                <div class="flex space-x-2">
+                    <button id="translate-btn" class="w-full btn btn-primary text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center disabled:opacity-50" disabled>
+                        <i class="fas fa-language mr-2"></i><span id="btn-text">Bắt đầu dịch</span>
+                    </button>
+                    <button id="pause-resume-btn" class="w-1/2 btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center hidden">
+                        <i id="pause-icon" class="fas fa-pause mr-2"></i><i id="resume-icon" class="fas fa-play mr-2 hidden"></i><span id="pause-resume-text">Tạm dừng</span>
+                    </button>
+                    <button id="stop-btn" class="w-1/2 btn bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center hidden">
+                        <i class="fas fa-stop mr-2"></i><span>Dừng</span>
+                    </button>
+                </div>
+
+                <!-- Nút tải xuống -->
+                <div class="space-y-2">
+                     <button id="download-btn" class="w-full btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center hidden">
+                        <i class="fas fa-download mr-2"></i><span>Tải xuống file đã dịch</span>
+                    </button>
+                    <button id="download-partial-btn" class="w-full btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center hidden">
+                        <i class="fas fa-save mr-2"></i><span>Tải xuống bản dịch tạm thời</span>
+                    </button>
+                </div>
+               
+                <!-- Thanh tiến trình -->
+                <div id="progress-container" class="hidden w-full space-y-2">
+                    <div class="flex justify-between items-center text-sm font-medium text-gray-600">
+                        <span id="progress-status">Đang dịch...</span>
+                        <span id="progress-info">0/0 dòng (0%)</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-blue-500 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Vùng thông báo -->
+                <div id="message-box" class="text-center text-sm p-3 rounded-lg hidden"></div>
+            </div>
+
+            <!-- Tab 2: Chuyển đổi Text sang SRT -->
+            <div id="converter" role="tabpanel" aria-labelledby="converter-tab" class="hidden">
+                 <p class="text-gray-500 text-center mb-6">Tải lên tệp .txt hoặc dán nội dung và nhấn "Chuyển đổi".</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="inputText" class="block mb-2 text-sm font-medium text-gray-700">Nội dung đầu vào (.txt)</label>
+                        <textarea id="inputText" rows="12" class="w-full p-4 bg-gray-50 border border-gray-300 rounded-lg resize-none" placeholder="[00:00:00.000 --> 00:00:06.540] Dòng phụ đề đầu tiên..."></textarea>
+                    </div>
+                    <div>
+                        <label for="outputText" class="block mb-2 text-sm font-medium text-gray-700">Kết quả đầu ra (.srt)</label>
+                        <textarea id="outputText" rows="12" class="w-full p-4 bg-gray-50 border border-gray-300 rounded-lg resize-none" readonly placeholder="Kết quả định dạng SRT sẽ xuất hiện ở đây..."></textarea>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 pt-6">
+                    <input type="file" id="fileInput" class="hidden" accept=".txt">
+                    <button id="uploadBtn" class="w-full sm:w-auto btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg">
+                        Tải lên tệp .txt
+                    </button>
+                    <button id="convertBtn" class="w-full sm:w-auto btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                        Chuyển đổi
+                    </button>
+                    <button id="saveBtn" class="w-full sm:w-auto btn bg-gray-500 text-white font-bold py-3 px-6 rounded-lg cursor-not-allowed opacity-50" disabled>
+                        Lưu file .srt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liên kết tới tệp JavaScript -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>

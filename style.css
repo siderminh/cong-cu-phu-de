@@ -1,0 +1,43 @@
+/* Tùy chỉnh chung */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* Hiệu ứng chuyển động cho nút và các ô nhập liệu */
+.form-input,
+.btn {
+    transition: all 0.3s ease;
+}
+
+.form-input:focus, textarea:focus, select:focus {
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+    border-color: #4299e1;
+    outline: none;
+}
+
+.btn-primary {
+    background-color: #4a90e2;
+}
+
+.btn-primary:hover {
+    background-color: #357abd;
+}
+
+.progress-bar-fill {
+    transition: width 0.5s ease-in-out;
+}
+
+/* CSS cho nút gạt (toggle switch) */
+#auto-resume-toggle:checked ~ .dot,
+#fix-sr-errors-toggle:checked ~ .dot {
+    transform: translateX(150%);
+    background-color: #4a90e2;
+}
+#auto-resume-toggle:checked ~ .block,
+#fix-sr-errors-toggle:checked ~ .block {
+    background-color: #a0aec0;
+}
+.dot {
+    transition: all 0.2s ease-in-out;
+}
